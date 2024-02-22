@@ -2,3 +2,9 @@ name: BanBook
 version: '${project.version}'
 main: me._olios.banbook.BanBook
 api-version: 1.20
+commands:
+  banbook:
+    aliases:
+      - bb
+    usage: /<command>
+    description: the main command for the BanBook plugin
