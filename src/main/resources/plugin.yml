@@ -1,0 +1,4 @@
+name: BanBook
+version: '${project.version}'
+main: me._olios.banbook.BanBook
+api-version: 1.20
