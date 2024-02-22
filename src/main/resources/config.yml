@@ -1,0 +1,6 @@
+
+skull:
+  name: §b{player}
+  lore:
+    - §7Right-Clicks to set the player
+    - as hunted for the next 24 hours!
