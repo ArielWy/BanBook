@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
 import org.bukkit.entity.Player
 
-class BanBookCommand: CommandExecutor, TabCompleter {
+class BanBookCommand(private val plugin: BanBook): CommandExecutor, TabCompleter {
 
     override fun onCommand(sender: CommandSender, p1: Command, p2: String, p3: Array<out String>?): Boolean {
         if (sender !is Player) return false
@@ -15,7 +15,7 @@ class BanBookCommand: CommandExecutor, TabCompleter {
                 return false
             }
             p3[0].equals("give", ignoreCase = true) -> {
-                sender.sendMessage("GIVE BAN BOOK")
+                PlayerGUI(sender, plugin).openGUI(0)
                 return true
             }
 
