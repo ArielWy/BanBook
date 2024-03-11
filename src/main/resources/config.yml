@@ -4,3 +4,25 @@ skull:
   lore:
     - §eRight-Clicks §7to set the player
     - §7as hunted for the next 24 hours!
+
+info-item:
+  name: information Book!
+  lore:
+    - all the info
+    - of what
+    - you can do
+    - in this window
+
+previous-button:
+  name: previous
+  lore:
+    - click on me
+    - to go to
+    - the previous page
+
+next-button:
+  name: next
+  lore:
+    - click on me
+    - to go to
+    - the next page

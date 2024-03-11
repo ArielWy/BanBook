@@ -42,9 +42,23 @@ class BanBookCommand(private val plugin: BanBook): CommandExecutor, TabCompleter
     }
 
     private fun reloadPlugin(player: Player) {
-        plugin.reloadConfig()
-        player.sendMessage("§b[§6BanBook§b] §athe plugin reloaded!")
+        try {
+            plugin.reloadConfig()
+            player.sendMessage("§b[§6BanBook§b] §athe plugin reloaded!")
+        } catch (exception: Exception) {
+            // Log the error
+            plugin.logger.severe("Failed to reload configuration: ${exception.message}")
+
+            // Send a message to the player
+            player.sendMessage("§b[§6BanBook§b] §cThe plugin failed to reload. Please check the server logs for more details.")
+
+            // Reload the original file
+            plugin.saveDefaultConfig()
+            plugin.reloadConfig()
+            player.sendMessage("§b[§6BanBook§b] §aThe original configuration has been reloaded.")
+        }
     }
+
 
 
 }

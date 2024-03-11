@@ -7,6 +7,7 @@ import org.bukkit.Material
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
+import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.SkullMeta
 import java.io.File
 
@@ -22,19 +23,31 @@ class PlayerGUI(private val player: Player, plugin: BanBook) {
     private fun openPage(player: Player, pages: List<List<ItemStack>>, pageIndex: Int) {
         val inventory = Bukkit.createInventory(null, 54, "Online Players Page ${pageIndex + 1}")
 
+        // create items
+        val borderSlot = createItemStack(Material.GRAY_STAINED_GLASS_PANE, "")
+        val infoBook = createItemStack(Material.BOOK, "info-item.name", listOf("info-item.lore"), true)
+
+        // Set items in the inventory
+        inventory.setItem(4, infoBook)
+        for (i in 9..17) inventory.setItem(i, borderSlot)
+
         // Add skulls to the inventory
         pages[pageIndex].forEachIndexed { index, skull ->
-            inventory.setItem(index, skull)
+            inventory.setItem((index + 18), skull)
         }
 
         // Add navigation buttons
         if (pageIndex > 0) {
             // Add "previous page" button at the bottom left
-            player.sendMessage("previous page")
+            val previousPageButton = createItemStack(Material.REDSTONE_ORE, "previous-button.name",
+                listOf("previous-button.lore"), true)
+            inventory.setItem(3, previousPageButton)
         }
         if (pageIndex < pages.size - 1) {
             // Add "next page" button at the bottom right
-            player.sendMessage("next page")
+            val nextPageButton = createItemStack(Material.SCULK_SENSOR, "next-button.name",
+                listOf("next-button.lore"), true)
+            inventory.setItem(5, nextPageButton)
         }
 
         player.openInventory(inventory)
@@ -54,6 +67,48 @@ class PlayerGUI(private val player: Player, plugin: BanBook) {
         }
     }
 
+    private fun createItemStack(material: Material, displayName: String, lore: List<String>? = null, fromConfig: Boolean = false): ItemStack {
+        val itemStack = ItemStack(material)
+        val itemMeta: ItemMeta = itemStack.itemMeta
+
+        var finalDisplayName = displayName
+        var finalLore: List<String> = lore ?: listOf()
+
+        if (fromConfig) {
+            val configItemStack = configItemStack(displayName, lore?.get(0))
+            finalDisplayName = configItemStack.first
+            finalLore = configItemStack.second
+        }
+
+        itemMeta.displayName(Component.text(finalDisplayName))
+        if (finalLore.isNotEmpty()) {
+            val loreComponents = finalLore.map { Component.text(it) }
+            itemMeta.lore(loreComponents)
+        }
+        itemStack.itemMeta = itemMeta
+
+        return itemStack
+    }
+
+    private fun configItemStack(displayName: String, lore: String? = null): Pair<String, List<String>> {
+        // Set the displayName from the config
+        var name = config.getString(displayName)
+        name = name?.replace("{player}", player.name)
+        val finalDisplayName = ChatColor.translateAlternateColorCodes('§', name ?: "")
+
+        // Set the lore from the config
+        var finalLore: List<String> = listOf()
+        if (lore != null) {
+            val configLore = config.getStringList(lore)
+            finalLore = configLore.map { skullLore ->
+                var result = ChatColor.translateAlternateColorCodes('§', skullLore)
+                result = result.replace("{player}", player.name)
+                result
+            }
+        }
+
+        return Pair(finalDisplayName, finalLore)
+    }
 
     private fun getPlayerSkullName(): String {
         var name = config.getString("skull.name")
