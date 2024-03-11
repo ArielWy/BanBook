@@ -2,5 +2,5 @@
 skull:
   name: §b{player}
   lore:
-    - §7Right-Clicks to set the player
-    - as hunted for the next 24 hours!
+    - §eRight-Clicks §7to set the player
+    - §7as hunted for the next 24 hours!

@@ -10,7 +10,8 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.SkullMeta
 import java.io.File
 
-class PlayerGUI(private val player: Player, private val plugin: BanBook) {
+class PlayerGUI(private val player: Player, plugin: BanBook) {
+    private val config = plugin.config
 
     fun openGUI(pageIndex: Int) {
         val playerSkulls = getPlayerHeads()
@@ -55,18 +56,16 @@ class PlayerGUI(private val player: Player, private val plugin: BanBook) {
 
 
     private fun getPlayerSkullName(): String {
-        val config = YamlConfiguration.loadConfiguration(File("config.yml"))
         var name = config.getString("skull.name")
-        name = name?.replace("{player}", player.toString())
-        return ChatColor.translateAlternateColorCodes('&', name ?: "")
+        name = name?.replace("{player}", player.name)
+        return ChatColor.translateAlternateColorCodes('§', name ?: "")
     }
 
     private fun getPlayerSkullLore(): List<String> {
-        val config = YamlConfiguration.loadConfiguration(File("config.yml"))
         val lore = config.getStringList("skull.lore")
         return lore.map { skullLore ->
-            var result = ChatColor.translateAlternateColorCodes('&', skullLore)
-            result = result.replace("{player}", player.toString())
+            var result = ChatColor.translateAlternateColorCodes('§', skullLore)
+            result = result.replace("{player}", player.name)
             result
         }
     }

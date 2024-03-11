@@ -14,8 +14,12 @@ class BanBookCommand(private val plugin: BanBook): CommandExecutor, TabCompleter
             p3!!.isEmpty() -> {
                 return false
             }
-            p3[0].equals("give", ignoreCase = true) -> {
+            p3[0].equals("gui", ignoreCase = true) -> {
                 PlayerGUI(sender, plugin).openGUI(0)
+                return true
+            }
+            p3[0].equals("reload", ignoreCase = true) -> {
+                reloadPlugin(sender)
                 return true
             }
 
@@ -31,10 +35,15 @@ class BanBookCommand(private val plugin: BanBook): CommandExecutor, TabCompleter
     ): MutableList<String>? {
         if (p1.name.equals("banbook", ignoreCase = true)) {
             if (p3!!.size == 1) {
-                return mutableListOf("give")
+                return mutableListOf("gui", "reload")
             }
         }
         return null
+    }
+
+    private fun reloadPlugin(player: Player) {
+        plugin.reloadConfig()
+        player.sendMessage("§b[§6BanBook§b] §athe plugin reloaded!")
     }
 
 
