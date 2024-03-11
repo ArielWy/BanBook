@@ -1,5 +1,6 @@
 package me._olios.banbook
 
+import me._olios.banbook.GUI.PlayerGUI
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender

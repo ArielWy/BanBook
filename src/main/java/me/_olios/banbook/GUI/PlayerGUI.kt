@@ -1,17 +1,18 @@
-package me._olios.banbook
+package me._olios.banbook.GUI
 
+import me._olios.banbook.BanBook
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.Material
-import org.bukkit.configuration.file.YamlConfiguration
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.SkullMeta
-import java.io.File
+import org.bukkit.persistence.PersistentDataType
 
-class PlayerGUI(private val player: Player, plugin: BanBook) {
+class PlayerGUI(private val player: Player,private val plugin: BanBook) {
     private val config = plugin.config
 
     fun openGUI(pageIndex: Int) {
@@ -22,6 +23,7 @@ class PlayerGUI(private val player: Player, plugin: BanBook) {
 
     private fun openPage(player: Player, pages: List<List<ItemStack>>, pageIndex: Int) {
         val inventory = Bukkit.createInventory(null, 54, "Online Players Page ${pageIndex + 1}")
+        BanBook.playerInventory.getOrPut(player.uniqueId) { inventory }
 
         // create items
         val borderSlot = createItemStack(Material.GRAY_STAINED_GLASS_PANE, "")
@@ -59,15 +61,17 @@ class PlayerGUI(private val player: Player, plugin: BanBook) {
             val head = ItemStack(Material.PLAYER_HEAD)
             val meta = head.itemMeta as SkullMeta
             meta.owningPlayer = player
+
+            // Set the display as the config
             meta.displayName(Component.text(getPlayerSkullName()))
             val loreComponents = getPlayerSkullLore().map { Component.text(it) }
+
             meta.lore(loreComponents)
             head.itemMeta = meta
             head
         }
     }
-
-    private fun createItemStack(material: Material, displayName: String, lore: List<String>? = null, fromConfig: Boolean = false): ItemStack {
+    fun createItemStack(material: Material, displayName: String, lore: List<String>? = null, fromConfig: Boolean = false): ItemStack {
         val itemStack = ItemStack(material)
         val itemMeta: ItemMeta = itemStack.itemMeta
 
