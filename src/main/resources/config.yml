@@ -26,3 +26,10 @@ next-button:
     - click on me
     - to go to
     - the next page
+
+confirm-item:
+  name: §b§lHunt Trigger for {player}
+  lore:
+    - §7§oClick to initiate the hunt.
+    - §7§oThis will target the player {player}.
+    - §7§oEnsure you're prepared before proceeding!

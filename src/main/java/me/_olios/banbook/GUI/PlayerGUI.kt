@@ -23,7 +23,7 @@ class PlayerGUI(private val player: Player,private val plugin: BanBook) {
 
     private fun openPage(player: Player, pages: List<List<ItemStack>>, pageIndex: Int) {
         val inventory = Bukkit.createInventory(null, 54, "Online Players Page ${pageIndex + 1}")
-        BanBook.playerInventory.getOrPut(player.uniqueId) { inventory }
+        BanBook.playerInventory[player.uniqueId] = inventory
 
         // create items
         val borderSlot = createItemStack(Material.GRAY_STAINED_GLASS_PANE, "")
@@ -53,6 +53,7 @@ class PlayerGUI(private val player: Player,private val plugin: BanBook) {
         }
 
         player.openInventory(inventory)
+        player.sendMessage(BanBook.playerInventory.toString())
     }
 
     private fun getPlayerHeads(): List<ItemStack> {
@@ -65,7 +66,6 @@ class PlayerGUI(private val player: Player,private val plugin: BanBook) {
             // Set the display as the config
             meta.displayName(Component.text(getPlayerSkullName()))
             val loreComponents = getPlayerSkullLore().map { Component.text(it) }
-
             meta.lore(loreComponents)
             head.itemMeta = meta
             head

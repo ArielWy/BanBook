@@ -1,10 +1,7 @@
 package me._olios.banbook.listeners
 
 import me._olios.banbook.BanBook
-import me._olios.banbook.GUI.confirmGUI
-import org.bukkit.Bukkit
-import org.bukkit.NamespacedKey
-import org.bukkit.block.Skull
+import me._olios.banbook.GUI.ConfirmGUI
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -31,6 +28,6 @@ class InventoryClickListener(private val plugin: BanBook): Listener {
 
         if (!targetedPlayer.isOnline) return
 
-        confirmGUI(player, plugin).confirm(targetedPlayer, item)
+        ConfirmGUI(player, plugin).confirm(targetedPlayer, item)
     }
 }
