@@ -1,3 +1,8 @@
+# BanBook configuration file
+
+General:
+  BanTime: 7 # in days
+  BanMessage: "you are got banned!"
 
 skull:
   name: §b{player}

@@ -1,5 +1,6 @@
-package me._olios.banbook
+package me._olios.banbook.utils
 
+import me._olios.banbook.BanBook
 import me._olios.banbook.GUI.PlayerGUI
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -48,7 +49,7 @@ class BanBookCommand(private val plugin: BanBook): CommandExecutor, TabCompleter
     private fun reloadPlugin(player: Player) {
         try {
             plugin.reloadConfig()
-            player.sendMessage("§b[§6BanBook§b] §athe plugin reloaded!")
+            player.sendMessage("§b[§6BanBook§b] §athe plugin has been reloaded!")
         } catch (exception: Exception) {
             // Log the error
             plugin.logger.severe("Failed to reload configuration: ${exception.message}")
