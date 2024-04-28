@@ -1,8 +1,19 @@
 # BanBook configuration file
 
 General:
+  TargetedPlayerAlert: true # Notifies everyone when a player targets another player
+  TargetedPlayerBanAlert: false # Alerts when a targeted player gets banned
+  TargetedPlayerReviveAlert: false # Sends a message when a player revives a targeted player
+
   BanTime: 7 # in days
-  BanMessage: "you are got banned!"
+
+
+Messages:
+  TargetedPlayerMessage: "{target} was targeted by {player}!"
+  TargetedPlayerBanAlert: "{target} died"
+  TargetedPlayerReviveAlert: "{target} revived by {player}!"
+
+  BanMessage: "you got ban!"
 
 skull:
   name: §b{player}
