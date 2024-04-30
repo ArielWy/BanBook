@@ -6,7 +6,10 @@ import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
+import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
+import java.io.File
 
 class BanBookCommand(private val plugin: BanBook): CommandExecutor, TabCompleter {
 
@@ -49,6 +52,8 @@ class BanBookCommand(private val plugin: BanBook): CommandExecutor, TabCompleter
     private fun reloadPlugin(player: Player) {
         try {
             plugin.reloadConfig()
+            val defineFile = File(plugin.dataFolder, "define.yml")
+            YamlConfiguration.loadConfiguration(defineFile)
             player.sendMessage("§b[§6BanBook§b] §athe plugin has been reloaded!")
         } catch (exception: Exception) {
             // Log the error

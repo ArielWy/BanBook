@@ -72,9 +72,5 @@ class InventoryClickListener(private val plugin: BanBook): Listener {
             player.persistentDataContainer.remove(key)
         }
 
-
-
-
-
     }
 }

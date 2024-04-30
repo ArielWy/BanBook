@@ -3,6 +3,7 @@ package me._olios.banbook
 import me._olios.banbook.listeners.InventoryClickListener
 import me._olios.banbook.listeners.InventoryCloseListener
 import me._olios.banbook.listeners.PlayerDeathListener
+import me._olios.banbook.listeners.PlayerInteractListener
 import me._olios.banbook.utils.BanBookCommand
 import me._olios.banbook.utils.DefineItem
 import org.bukkit.Bukkit
@@ -33,6 +34,7 @@ class BanBook : JavaPlugin() {
         Bukkit.getServer().pluginManager.registerEvents(InventoryClickListener(this), this)
         Bukkit.getServer().pluginManager.registerEvents(PlayerDeathListener(this), this)
         Bukkit.getServer().pluginManager.registerEvents(InventoryCloseListener(this), this)
+        Bukkit.getServer().pluginManager.registerEvents(PlayerInteractListener(this), this)
     }
 
         override fun onDisable() {

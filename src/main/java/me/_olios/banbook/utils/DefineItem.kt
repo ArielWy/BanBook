@@ -32,8 +32,7 @@ class DefineItem(private val player: Player, private val plugin: BanBook) {
 
     private fun defineItem(item: ItemStack) {
         val configPath = "BanBookItem"
-        val itemString = item.toString()
-        defineConfig.set(configPath, itemString)
+        defineConfig.set(configPath, item)
 
         // try to save the file
         try {
@@ -42,7 +41,7 @@ class DefineItem(private val player: Player, private val plugin: BanBook) {
             e.printStackTrace()
         }
 
-        if (defineConfig.getString(configPath) == itemString) {
+        if (defineConfig.getItemStack(configPath) == item) {
             player.sendMessage("§aDefine the item successfully as §6{§e${defineConfig.getString(configPath)}§6}")
         } else {
             player.sendMessage("§cItem not found in the config!")
