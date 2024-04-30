@@ -2,9 +2,9 @@ package me._olios.banbook.listeners
 
 import me._olios.banbook.BanBook
 import me._olios.banbook.GUI.ConfirmGUI
-import me._olios.banbook.utils.PlayerTarget
+import me._olios.banbook.handler.InteractionHandler
+import me._olios.banbook.handler.TargetHandler
 import org.bukkit.Bukkit
-import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
@@ -61,8 +61,10 @@ class InventoryClickListener(private val plugin: BanBook): Listener {
         }
         else if (item.type == Material.LIME_STAINED_GLASS_PANE && displayName == "§aCONFIRM") {
             player.sendMessage("§aCONFIRM")
-            // set target
-            PlayerTarget(targetPlayer, plugin).useItem(player)
+
+            // Define target and start the hunt
+            TargetHandler(targetPlayer, plugin).targetUUID()
+            InteractionHandler(player, targetPlayer, plugin).handler() // send message and remove the ban book item
 
             // close everything
             BanBook.playerInventory.remove(player.uniqueId)

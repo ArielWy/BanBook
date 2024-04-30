@@ -1,19 +1,19 @@
-package me._olios.banbook.utils
+package me._olios.banbook.handler
 
 import me._olios.banbook.BanBook
+import net.kyori.adventure.text.Component
+import org.bukkit.Bukkit
+import org.bukkit.NamespacedKey
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import org.bukkit.persistence.PersistentDataType
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.Date
 
-class PlayerTarget(private val target: Player, plugin: BanBook) {
+class TargetHandler(private val target: Player, val plugin: BanBook) {
     private val config = plugin.config
 
-    fun useItem(player: Player) {
-        // Send Messages if toggled
-
-        targetUUID()
-    }
 
     // add player to the targeted player list
     fun targetUUID() {

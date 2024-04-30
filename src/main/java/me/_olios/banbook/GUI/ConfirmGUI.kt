@@ -28,6 +28,7 @@ class ConfirmGUI(private val player: Player, private val plugin: BanBook) {
     }
 
     private fun setTarget(targetedPlayer: Player) {
+        // set the target
         val key = NamespacedKey(plugin, "target")
         player.persistentDataContainer.set(key, PersistentDataType.STRING, targetedPlayer.name)
     }
