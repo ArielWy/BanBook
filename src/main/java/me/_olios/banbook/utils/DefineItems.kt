@@ -9,10 +9,9 @@ import org.bukkit.inventory.ItemStack
 import java.io.File
 import java.io.IOException
 
-class DefineItem(private val player: Player, private val plugin: BanBook) {
+class DefineItems(private val player: Player, private val plugin: BanBook, private val configPath: String) {
     private val defineFile: File = File(plugin.dataFolder, "define.yml")
     private val defineConfig: FileConfiguration = YamlConfiguration.loadConfiguration(defineFile)
-
 
     init {
         // Load or create the define.yml configuration file
@@ -21,10 +20,10 @@ class DefineItem(private val player: Player, private val plugin: BanBook) {
     }
 
     fun giveItem() {
-        val banBook = retrieve()
-        if (banBook != null) {
-            player.inventory.setItemInMainHand(banBook)
-            player.sendMessage("§agive §2${player.name} §6{§e$banBook§6}")
+        val item = retrieve()
+        if (item != null) {
+            player.inventory.setItemInMainHand(item)
+            player.sendMessage("§agive §2${player.name} §6{§e${item.type}§6}")
         }
         else player.sendMessage("§cThe item is not found in the config file!")
     }
@@ -40,11 +39,9 @@ class DefineItem(private val player: Player, private val plugin: BanBook) {
     }
 
     private fun defineItem(item: ItemStack) {
-        val configPath = "BanBookItem"
         defineConfig.set(configPath, item)
 
-        // try to save the file
-        try {
+        try { // try to save the file
             defineConfig.save(defineFile)
         } catch (e: IOException) {
             e.printStackTrace()
@@ -62,16 +59,16 @@ class DefineItem(private val player: Player, private val plugin: BanBook) {
         val defineConfig: FileConfiguration = YamlConfiguration.loadConfiguration(defineFile)
 
         // Retrieving the value
-        val loadedItemStack: ItemStack? = defineConfig.getItemStack("BanBookItem")
-        var banBookItem: ItemStack? = null
+        val loadedItemStack: ItemStack? = defineConfig.getItemStack(configPath)
+        var configItem: ItemStack? = null
         if (loadedItemStack != null) {
             try {
-                banBookItem = loadedItemStack
+                configItem = loadedItemStack
             } catch (e: Exception) {
                 // Handle any exceptions during deserialization
                 e.printStackTrace()
             }
         }
-        return banBookItem
+        return configItem
     }
 }

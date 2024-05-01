@@ -1,12 +1,10 @@
 package me._olios.banbook.utils
 
 import me._olios.banbook.BanBook
-import me._olios.banbook.GUI.PlayerGUI
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
 import org.bukkit.command.TabCompleter
-import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import java.io.File
@@ -15,32 +13,32 @@ class BanBookCommand(private val plugin: BanBook): CommandExecutor, TabCompleter
 
     override fun onCommand(sender: CommandSender, p1: Command, p2: String, p3: Array<out String>?): Boolean {
         if (sender !is Player) return false
-        when {
-            p3!!.isEmpty() -> {
-                return false
-            }
-            p3[0].equals("give", ignoreCase = true) -> {
-                if (p3[1].equals("banBook", ignoreCase = true)) {
-                    DefineItem(sender, plugin).giveItem()
-                    return true
+        val command = p3?.getOrElse(0) { return false }?.lowercase()
+        when (command) {
+            "give" -> {
+                if (p3.size < 2) return false
+                when (p3[1].lowercase()) {
+                    "banbook" -> DefineItems(sender, plugin, "BanBookItem").giveItem()
+                    "revivebook" -> DefineItems(sender, plugin, "ReviveBookItem").giveItem()
+                    else -> sender.sendMessage("Invalid item type. Available: banbook, revivebook")
                 }
-                else {
-                    if (p3[1].equals("reviveBook", ignoreCase = true)) {
-                        // give the reviveBook
-                        return true
-                    }
-                }
-            }
-            p3[0].equals("define", ignoreCase = true) -> {
-                DefineItem(sender, plugin).checkForItem()
                 return true
             }
-            p3[0].equals("reload", ignoreCase = true) -> {
+            "define" -> {
+                if (p3.size < 2) return false
+                when (p3[1].lowercase()) {
+                    "banbook" -> DefineItems(sender, plugin, "BanBookItem").checkForItem()
+                    "revivebook" -> DefineItems(sender, plugin, "ReviveBookItem").checkForItem()
+                    else -> sender.sendMessage("Invalid item type. Available: banbook, revivebook")
+                }
+                return true
+            }
+            "reload" -> {
                 reloadPlugin(sender)
                 return true
             }
+            else -> return false
         }
-        return false
     }
 
     override fun onTabComplete(
@@ -53,7 +51,7 @@ class BanBookCommand(private val plugin: BanBook): CommandExecutor, TabCompleter
             if (p3!!.size == 1) {
                 return mutableListOf("give", "define", "reload")
             }
-            if (p3[0].equals("give", ignoreCase = true))
+            if (p3[0].equals("give", ignoreCase = true) || p3[0].equals("define", ignoreCase = true))
                 if (p3.size == 2) {
                     return mutableListOf("banBook", "reviveBook")
                 }
