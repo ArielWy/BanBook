@@ -23,7 +23,6 @@ class BanBook : JavaPlugin() {
 
     companion object {
         val playerInventory: MutableMap<UUID, Inventory> = mutableMapOf()
-        val targetedPlayer: MutableMap<UUID, LocalDateTime> = mutableMapOf()
     }
 
     private fun registerCommands() {
