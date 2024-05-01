@@ -62,9 +62,7 @@ class InventoryClickListener(private val plugin: BanBook): Listener {
         else if (item.type == Material.LIME_STAINED_GLASS_PANE && displayName == "§aCONFIRM") {
             player.sendMessage("§aCONFIRM")
 
-            // Define target and start the hunt
-            TargetHandler(targetPlayer, plugin).targetUUID()
-            InteractionHandler(player, targetPlayer, plugin).handler() // send message and remove the ban book item
+            InteractionHandler(player, targetPlayer, plugin).handler() // define target
 
             // close everything
             BanBook.playerInventory.remove(player.uniqueId)

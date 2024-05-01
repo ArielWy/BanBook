@@ -13,14 +13,17 @@ class InventoryCloseListener(private val plugin: BanBook): Listener {
 
     @EventHandler
     fun onInventoryClose(event: InventoryCloseEvent) {
-        val player = event.player
+        val player = event.player as Player
 
+        targetCheck(player) // remove PDC from the player
+    }
+
+    private fun targetCheck(player: Player) {
         // Check if the player has Data Container
-        val key = NamespacedKey(plugin, "target")
-        val targetPlayer = player.persistentDataContainer.get(key, PersistentDataType.STRING) ?: return
+        val key1 = NamespacedKey(plugin, "target")
+        val targetPlayer = player.persistentDataContainer.get(key1, PersistentDataType.STRING) ?: return
 
         // Remove the persistentDataContainer from the player
-        player.persistentDataContainer.remove(key)
-
+        player.persistentDataContainer.remove(key1)
     }
 }

@@ -3,15 +3,26 @@ package me._olios.banbook.handler
 import me._olios.banbook.BanBook
 import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
-import org.bukkit.NamespacedKey
+import org.bukkit.Material
+import org.bukkit.configuration.file.FileConfiguration
+import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataType
+import java.io.File
 
 class InteractionHandler(private val player: Player, private val target: Player, private val plugin: BanBook) {
         private val config = plugin.config
 
     fun handler() {
+        val banBook = retrieve()
+
+        if (player.inventory.itemInMainHand != banBook) {
+            return
+        }
+
+        // Define target
+        TargetHandler(target, plugin).targetUUID()
+
         // alert the players
         targetedPlayerAlert()
 
@@ -39,19 +50,27 @@ class InteractionHandler(private val player: Player, private val target: Player,
     }
 
     private fun removeUsedBanBooks() {
-        val key = NamespacedKey(plugin, "isUsed")
-        val inventory = player.inventory
-        val toRemove = mutableListOf<ItemStack>() // Store items to remove
+        // Set the main hand slot to air
+        val airItem = ItemStack(Material.AIR)
+        player.inventory.setItemInMainHand(airItem)
 
-        for (i in 0 until inventory.size) {
-            val itemStack = inventory.getItem(i) ?: continue // Skip null slots, continue loop
-            if (!itemStack.hasItemMeta()) continue
-            val itemMeta = itemStack.itemMeta
-            val value = itemMeta.persistentDataContainer.get(key, PersistentDataType.BOOLEAN) ?: false
-            if (value) {
-                toRemove.add(itemStack)
+    }
+
+    private fun retrieve(): ItemStack? {
+        val defineFile = File(plugin.dataFolder, "define.yml")
+        val defineConfig: FileConfiguration = YamlConfiguration.loadConfiguration(defineFile)
+
+        // Retrieving the value
+        val loadedItemStack: ItemStack? = defineConfig.getItemStack("BanBookItem")
+        var banBookItem: ItemStack? = null
+        if (loadedItemStack != null) {
+            try {
+                banBookItem = loadedItemStack
+            } catch (e: Exception) {
+                // Handle any exceptions during deserialization
+                e.printStackTrace()
             }
         }
-        toRemove.reversed().forEach { inventory.removeItem(it) } // remove all the items
+        return banBookItem
     }
 }
