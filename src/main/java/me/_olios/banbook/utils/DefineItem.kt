@@ -20,6 +20,15 @@ class DefineItem(private val player: Player, private val plugin: BanBook) {
             plugin.saveResource("define.yml", false)
     }
 
+    fun giveItem() {
+        val banBook = retrieve()
+        if (banBook != null) {
+            player.inventory.setItemInMainHand(banBook)
+            player.sendMessage("§agive §2${player.name} §6{§e$banBook§6}")
+        }
+        else player.sendMessage("§cThe item is not found in the config file!")
+    }
+
     fun checkForItem() {
         val item: ItemStack = player.inventory.itemInMainHand
         if (item.type == Material.AIR) isCanceled()
@@ -44,7 +53,25 @@ class DefineItem(private val player: Player, private val plugin: BanBook) {
         if (defineConfig.getItemStack(configPath) == item) {
             player.sendMessage("§aDefine the item successfully as §6{§e${defineConfig.getString(configPath)}§6}")
         } else {
-            player.sendMessage("§cItem not found in the config!")
+            player.sendMessage("§cThe item is not found in the config file")
         }
+    }
+
+    private fun retrieve(): ItemStack? {
+        val defineFile = File(plugin.dataFolder, "define.yml")
+        val defineConfig: FileConfiguration = YamlConfiguration.loadConfiguration(defineFile)
+
+        // Retrieving the value
+        val loadedItemStack: ItemStack? = defineConfig.getItemStack("BanBookItem")
+        var banBookItem: ItemStack? = null
+        if (loadedItemStack != null) {
+            try {
+                banBookItem = loadedItemStack
+            } catch (e: Exception) {
+                // Handle any exceptions during deserialization
+                e.printStackTrace()
+            }
+        }
+        return banBookItem
     }
 }
