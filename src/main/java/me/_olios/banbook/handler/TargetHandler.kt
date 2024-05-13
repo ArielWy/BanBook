@@ -1,6 +1,7 @@
 package me._olios.banbook.handler
 
 import me._olios.banbook.BanBook
+import net.kyori.adventure.text.Component
 import org.bukkit.*
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -41,19 +42,6 @@ class TargetHandler(val player: Player, val plugin: BanBook) {
         else notTargeted()
     }
 
-    fun revivePlayer(offlinePlayer: OfflinePlayer) { // Remove player from the ban list
-        if (!offlinePlayer.isBanned) return
-        val banList: BanList<Player> = Bukkit.getBanList(BanList.Type.PROFILE)
-        banList.pardon(offlinePlayer.name.toString())
-
-        val airItem = ItemStack(Material.AIR)
-        player.inventory.setItemInMainHand(airItem)  // Set the main hand slot to air
-        player.closeInventory()  // Close the inventory
-
-        if (config.getBoolean("General.TargetedPlayerReviveAlert"))
-            Bukkit.getServer().broadcastMessage("${offlinePlayer.name} has been unbanned!")
-    }
-
     private fun notTargeted() { // Remove the player from the targeted player list if the time past
         val targetPDC: PersistentDataContainer = player.persistentDataContainer // Get the target's PDC
         val key = NamespacedKey(plugin, "hunt_end_date") // Define the NamespacedKe
@@ -70,6 +58,15 @@ class TargetHandler(val player: Player, val plugin: BanBook) {
         val banExpires = LocalDateTime.now().plusDays(configBanDate.toLong()) // Get the ban expires date
         val instant = banExpires.atZone(ZoneId.systemDefault()).toInstant() // Convert LocalDateTime to Instant
         val date = Date.from(instant) // Convert Instant to java.util.Date
+
+        // Send Messages if toggled in the config
+        var alert: String = config.getString("General.TargetedPlayerBanAlert") ?: return
+        alert = alert.replace("{target}", player.name)
+
+        // if toggled, broadcast to all the players
+        if (config.getBoolean("Messages.TargetedPlayerBanAlert"))
+            Bukkit.broadcast(Component.text(alert))
+        else player.sendMessage(Component.text(alert)) // else, send to the player
 
         // Ban the player
         player.banPlayer(configBanMessage, date)

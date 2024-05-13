@@ -35,17 +35,20 @@ class InventoryClickListener(private val plugin: BanBook): Listener {
         player.sendMessage("skull interact")
         if (item.itemMeta !is SkullMeta) return  // return if it's not skull interact in the GUI
         val skullMeta = item.itemMeta as SkullMeta
+
         val targetedPlayerUUID: UUID = skullMeta.owningPlayer?.uniqueId ?: UUID.randomUUID()
         player.sendMessage("target UUID: $targetedPlayerUUID")
 
         // Check if online before casting
         val targetedPlayer = Bukkit.getOfflinePlayer(targetedPlayerUUID)
         player.sendMessage("try target: $targetedPlayer")
+
         if (targetedPlayer.hasPlayedBefore()) {  // Player exist
             player.sendMessage("target: ${targetedPlayer.name}")
+
             if (targetedPlayer.isBanned && !targetedPlayer.isOnline) {
                 player.sendMessage("§9revive!")
-                TargetHandler(player, plugin).revivePlayer(targetedPlayer)
+                InteractionHandler(plugin).reviveBookHandler(player, targetedPlayer)
             }
             else{  // player currently online
                 val onlinePlayer: Player = Bukkit.getPlayer(targetedPlayerUUID)!!
@@ -74,7 +77,7 @@ class InventoryClickListener(private val plugin: BanBook): Listener {
         else if (item.type == Material.LIME_STAINED_GLASS_PANE && displayName == "§aCONFIRM") {
             player.sendMessage("§aCONFIRM")
 
-            InteractionHandler(player, targetPlayer, plugin).handler()  // define target
+            InteractionHandler(plugin).banBookHandler(player, targetPlayer)  // define target
 
             // close everything
             BanBook.playerInventory.remove(player.uniqueId)
