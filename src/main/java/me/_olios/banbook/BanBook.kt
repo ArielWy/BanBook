@@ -5,6 +5,7 @@ import me._olios.banbook.listeners.InventoryCloseListener
 import me._olios.banbook.listeners.PlayerDeathListener
 import me._olios.banbook.listeners.PlayerInteractListener
 import me._olios.banbook.utils.BanBookCommand
+import me._olios.banbook.utils.UnbanCommand
 import org.bukkit.Bukkit
 import org.bukkit.inventory.Inventory
 import org.bukkit.plugin.java.JavaPlugin
@@ -25,6 +26,7 @@ class BanBook : JavaPlugin() {
 
     private fun registerCommands() {
         getCommand("banbook")?.setExecutor(BanBookCommand(this))
+        getCommand("unban")?.setExecutor(UnbanCommand(this))
     }
 
     private fun registerListeners() {

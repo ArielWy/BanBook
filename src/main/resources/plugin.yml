@@ -8,3 +8,7 @@ commands:
       - bb
     usage: /<command>
     description: the main command for the BanBook plugin
+
+  unban:
+    usage: /<command>
+    description: A check command for unbanning player

@@ -19,8 +19,8 @@ class ConfirmGUI(private val player: Player, private val plugin: BanBook) {
         BanBook.playerInventory[player.uniqueId] = inventory
 
         // Set the inventory items
-        for (i in 0..3) inventory.setItem(i, PlayerGUI(player, plugin).createItemStack(Material.LIME_STAINED_GLASS_PANE, "§aCONFIRM"))
-        for (i in 5..8) inventory.setItem(i, PlayerGUI(player, plugin).createItemStack(Material.RED_STAINED_GLASS_PANE, "§cDENIED"))
+        for (i in 0..3) inventory.setItem(i, BanBookGUI(player, plugin).createItemStack(Material.LIME_STAINED_GLASS_PANE, "§aCONFIRM"))
+        for (i in 5..8) inventory.setItem(i, BanBookGUI(player, plugin).createItemStack(Material.RED_STAINED_GLASS_PANE, "§cDENIED"))
         inventory.setItem(4, getConfirmItem(targetedPlayer))
 
         player.openInventory(inventory)
@@ -42,13 +42,13 @@ class ConfirmGUI(private val player: Player, private val plugin: BanBook) {
         confirmItemMeta.owningPlayer = owningPlayer
 
         // Assign the item display name
-        var name = config.getString("confirm-item.name")
+        var name = config.getString("Items.ConfirmItem.name")
         name = name?.replace("{player}", owningPlayer.name)
         name = ChatColor.translateAlternateColorCodes('§', name ?: "")
         confirmItemMeta.displayName(Component.text(name))
 
         // Assign the item display lore
-        val configLore = config.getStringList("confirm-item.lore")
+        val configLore = config.getStringList("Items.ConfirmItem.lore")
         val lore = configLore.map { loreLine ->
             var result = ChatColor.translateAlternateColorCodes('§', loreLine)
             result = result.replace("{player}", owningPlayer.name)

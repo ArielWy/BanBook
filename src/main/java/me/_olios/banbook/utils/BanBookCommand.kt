@@ -12,8 +12,8 @@ import java.io.File
 class BanBookCommand(private val plugin: BanBook): CommandExecutor, TabCompleter {
 
     override fun onCommand(sender: CommandSender, p1: Command, p2: String, p3: Array<out String>?): Boolean {
-        if (sender !is Player) return false
         val command = p3?.getOrElse(0) { return false }?.lowercase()
+        if (sender !is Player) return false
         when (command) {
             "give" -> {
                 if (p3.size < 2) return false

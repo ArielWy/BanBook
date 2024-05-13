@@ -15,37 +15,52 @@ Messages:
 
   BanMessage: "you got ban!"
 
-skull:
-  name: §b{player}
-  lore:
-    - §eRight-Clicks §7to set the player
-    - §7as hunted for the next 24 hours!
+Items:
+  BanBookSkull:
+    name: §b{player}
+    lore:
+      - §eRight-Clicks §7to set the player
+      - §7as hunted for the next 24 hours!
 
-info-item:
-  name: information Book!
-  lore:
-    - all the info
-    - of what
-    - you can do
-    - in this window
+  BanBookInfoItem:
+    name: information Book! (ban book)
+    lore:
+      - all the info
+      - of what
+      - you can do
+      - in this window
 
-previous-button:
-  name: previous
-  lore:
-    - click on me
-    - to go to
-    - the previous page
+  ConfirmItem:
+    name: §b§lHunt Trigger for {player}
+    lore:
+      - §7§oClick to initiate the hunt.
+      - §7§oThis will target the player {player}.
+      - §7§oEnsure you're prepared before proceeding!
 
-next-button:
-  name: next
-  lore:
-    - click on me
-    - to go to
-    - the next page
+  ReviveBookSkull:
+    name: §b{player}
+    lore:
+      - §eRight-Clicks §7to revive
+      - §7your friend from the dead!
 
-confirm-item:
-  name: §b§lHunt Trigger for {player}
-  lore:
-    - §7§oClick to initiate the hunt.
-    - §7§oThis will target the player {player}.
-    - §7§oEnsure you're prepared before proceeding!
+  ReviveBookInfoItem:
+    name: information Book! (revive book)
+    lore:
+      - all the info
+      - of what
+      - you can do
+      - in this GUI
+
+  PreviousButton:
+    name: previous
+    lore:
+      - click on me
+      - to go to
+      - the previous page
+
+  NextButton:
+    name: next
+    lore:
+      - click on me
+      - to go to
+      - the next page
