@@ -1,6 +1,7 @@
-package me._olios.banbook.utils
+package me._olios.banbook.commands
 
 import me._olios.banbook.BanBook
+import me._olios.banbook.utils.DefineItems
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender

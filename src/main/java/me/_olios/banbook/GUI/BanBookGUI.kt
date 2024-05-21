@@ -13,7 +13,6 @@ class BanBookGUI(private val player: Player, private val plugin: BanBook) {
     private val config = plugin.config
 
     fun openGUI(pageIndex: Int, isBanBookGUI: Boolean) {
-        player.sendMessage("page index: $pageIndex, open ban book: $isBanBookGUI")
 
         val playerSkulls: List<ItemStack> = if (isBanBookGUI)
             getPlayerHeads("Items.BanBookSkull.name", "Items.BanBookSkull.lore", true)
@@ -25,7 +24,6 @@ class BanBookGUI(private val player: Player, private val plugin: BanBook) {
     }
 
     private fun openPage(player: Player, pages: List<List<ItemStack>>, pageIndex: Int, infoNamePath: String, infoLorePath: String) {
-        player.sendMessage("pages: $pages")
 
         val inventory = Bukkit.createInventory(null, 54, "Online Players Page ${pageIndex + 1}")
         BanBook.playerInventory[player.uniqueId] = inventory
@@ -63,7 +61,6 @@ class BanBookGUI(private val player: Player, private val plugin: BanBook) {
     }
 
     private fun getPlayerHeads(namePath: String, lorePath: String, isBanBookGUI: Boolean): List<ItemStack> {
-        player.sendMessage("getPlayerHeads")
 
         val skullKey = NamespacedKey(plugin, "is_ban_book_GUI")
         val onlinePlayers = Bukkit.getOnlinePlayers()
@@ -71,14 +68,10 @@ class BanBookGUI(private val player: Player, private val plugin: BanBook) {
         val banList: BanList<Player> = Bukkit.getBanList(BanList.Type.PROFILE)
         val banEntries: MutableSet<BanEntry<in Player>> = banList.getEntries()
 
-
-        player.sendMessage("ban list: $banList, ban entries: $banEntries")
-
         return if (isBanBookGUI)
             onlinePlayers.map { onlinePlayerHead(it, skullKey, namePath, lorePath) }
         else {
             val configReason = config.getString("Messages.BanMessage")  // Get the config reason
-            player.sendMessage("ban entries size: ${banEntries.size}\nconfigReason: $configReason\n")
             banEntries.mapNotNull { banEntry ->
                 val playerUUID = banEntry.target
                 val player = Bukkit.getOfflinePlayer(playerUUID)
@@ -106,8 +99,6 @@ class BanBookGUI(private val player: Player, private val plugin: BanBook) {
     }
 
     private fun banPlayerHead(banPlayer: OfflinePlayer, skullKey: NamespacedKey, namePath: String, lorePath: String): ItemStack {
-        player.sendMessage("Processing player: ${banPlayer.name}")  // Print the name of the player being processed
-        player.sendMessage("Reason matches config reason")  // Print a message if the reason matches the config reason
         val head = ItemStack(Material.PLAYER_HEAD)
         val meta = head.itemMeta as SkullMeta
         meta.persistentDataContainer.set(skullKey, PersistentDataType.BOOLEAN, false)

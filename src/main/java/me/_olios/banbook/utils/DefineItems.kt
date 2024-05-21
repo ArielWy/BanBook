@@ -1,6 +1,7 @@
 package me._olios.banbook.utils
 
 import me._olios.banbook.BanBook
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.configuration.file.YamlConfiguration
@@ -8,6 +9,7 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import java.io.File
 import java.io.IOException
+
 
 class DefineItems(private val player: Player, private val plugin: BanBook, private val configPath: String) {
     private val defineFile: File = File(plugin.dataFolder, "define.yml")
@@ -23,9 +25,9 @@ class DefineItems(private val player: Player, private val plugin: BanBook, priva
         val item = retrieve()
         if (item != null) {
             player.inventory.setItemInMainHand(item)
-            player.sendMessage("§agive §2${player.name} §6{§e${item.type}§6}")
+            sendMessage("§agive §2${player.name} the §9$configPath§a as §6{§e${item.type}§6}")
         }
-        else player.sendMessage("§cThe item is not found in the config file!")
+        else sendMessage("§cThe §9$configPath§c is not found in the config file!")
     }
 
     fun checkForItem() {
@@ -35,7 +37,7 @@ class DefineItems(private val player: Player, private val plugin: BanBook, priva
     }
 
     private fun isCanceled() {
-        player.sendMessage("§cYou are not holding anything in your hand!")
+        player.sendMessage("§cYou are not holding anything in your hand!")  // Send message to the player
     }
 
     private fun defineItem(item: ItemStack) {
@@ -48,9 +50,9 @@ class DefineItems(private val player: Player, private val plugin: BanBook, priva
         }
 
         if (defineConfig.getItemStack(configPath) == item) {
-            player.sendMessage("§aDefine the item successfully as §6{§e${defineConfig.getString(configPath)}§6}")
+            sendMessage("§aDefine the §9$configPath§a successfully as §6{§e${defineConfig.getString(configPath)}§6}")
         } else {
-            player.sendMessage("§cThe item is not found in the config file")
+            sendMessage("§cThe §9$configPath§a is not found in the config file")
         }
     }
 
@@ -71,4 +73,10 @@ class DefineItems(private val player: Player, private val plugin: BanBook, priva
         }
         return configItem
     }
+
+    private fun sendMessage(message: String) {
+        Bukkit.getLogger().info("[BanBook] $message") // Log to console with prefix
+        player.sendMessage(message) // Send to player
+    }
+
 }
