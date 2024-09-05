@@ -61,28 +61,32 @@ class BanBookGUI(private val player: Player, private val plugin: BanBook) {
     }
 
     private fun getPlayerHeads(namePath: String, lorePath: String, isBanBookGUI: Boolean): List<ItemStack> {
-
         val skullKey = NamespacedKey(plugin, "is_ban_book_GUI")
-        val onlinePlayers = Bukkit.getOnlinePlayers()
 
-        val banList: BanList<Player> = Bukkit.getBanList(BanList.Type.PROFILE)
-        val banEntries: MutableSet<BanEntry<in Player>> = banList.getEntries()
+        val results = if (isBanBookGUI) {
+            // Handle online players efficiently
+            Bukkit.getOnlinePlayers().filter { !isImmune(it) }.map { onlinePlayerHead(it, skullKey, namePath, lorePath) }
+        } else {
+            // Handle banned players with filtering and config check
+            val configReason = config.getString("Messages.BanMessage")
+            val banList: BanList<Player> = Bukkit.getBanList(BanList.Type.PROFILE)
+            val banEntries: MutableSet<BanEntry<in Player>> = banList.getEntries()
 
-        return if (isBanBookGUI)
-            onlinePlayers.map { onlinePlayerHead(it, skullKey, namePath, lorePath) }
-        else {
-            val configReason = config.getString("Messages.BanMessage")  // Get the config reason
-            banEntries.mapNotNull { banEntry ->
-                val playerUUID = banEntry.target
-                val player = Bukkit.getOfflinePlayer(playerUUID)
-                if (player.hasPlayedBefore() && banEntry.reason == configReason) {
-                    banPlayerHead(player, skullKey, namePath, lorePath)
-                } else {
-                    null
-                }
+            val filteredEntries = banEntries.filter {
+                val offlinePlayer = Bukkit.getOfflinePlayer(it.target)
+                offlinePlayer.hasPlayedBefore() && it.reason == configReason && !isImmune(offlinePlayer)
             }
+
+            // Capture the player object during filtering
+            filteredEntries.map {
+                val offlinePlayer = Bukkit.getOfflinePlayer(it.target)
+                banPlayerHead(offlinePlayer, skullKey, namePath, lorePath) }
         }
+
+        // Ensure the result is a non-null list (even if empty)
+        return results.toList()
     }
+
 
     private fun onlinePlayerHead(player: Player, skullKey: NamespacedKey, namePath: String, lorePath: String): ItemStack {
         val head = ItemStack(Material.PLAYER_HEAD)
@@ -110,6 +114,14 @@ class BanBookGUI(private val player: Player, private val plugin: BanBook) {
         meta.lore(loreComponents)
         head.itemMeta = meta
         return head
+    }
+
+    private fun isImmune(player: OfflinePlayer): Boolean {
+        val immuneList = config.getList("General.ImmunePlayer")
+        if (immuneList != null) {
+            return player.name in immuneList
+        }
+        return false
     }
 
     fun createItemStack(material: Material, displayName: String, lore: List<String>? = null, fromConfig: Boolean = false): ItemStack {

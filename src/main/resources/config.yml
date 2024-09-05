@@ -6,6 +6,10 @@ General:
   TargetedPlayerReviveAlert: false # Sends a message when a player revives a targeted player
 
   BanTime: 7 # in days
+  ImmunePlayer: # players that can't be targeted
+   # for example
+    - "Example"
+    - "AnotherPlayer"
 
 
 Messages:

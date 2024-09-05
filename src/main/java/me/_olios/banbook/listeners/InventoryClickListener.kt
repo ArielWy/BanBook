@@ -27,11 +27,11 @@ class InventoryClickListener(private val plugin: BanBook): Listener {
 
         if (inventory != gui) return  // the player doesn't interact with the gui
         event.isCancelled = true  // Prevent people from interacting with their inventory
-        skullInteract(player, item)
+        skullInteract(player, item, event)
         confirmInteract(player, item, event)
     }
 
-    private fun skullInteract(player: Player, item: ItemStack) {
+    private fun skullInteract(player: Player, item: ItemStack, event: InventoryClickEvent) {
         if (item.itemMeta !is SkullMeta) return  // return if it's not skull interact in the GUI
         val skullMeta = item.itemMeta as SkullMeta
 
@@ -44,6 +44,8 @@ class InventoryClickListener(private val plugin: BanBook): Listener {
 
             if (targetedPlayer.isBanned && !targetedPlayer.isOnline) {
                 InteractionHandler(plugin).reviveBookHandler(player, targetedPlayer)
+
+                event.clickedInventory?.close()  // Closed the inventory
             }
             else{  // player currently online
                 val onlinePlayer: Player = Bukkit.getPlayer(targetedPlayerUUID)!!

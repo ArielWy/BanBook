@@ -60,7 +60,7 @@ class TargetHandler(val player: Player, val plugin: BanBook) {
         val date = Date.from(instant) // Convert Instant to java.util.Date
 
         // Send Messages if toggled in the config
-        var alert: String = config.getString("General.TargetedPlayerBanAlert") ?: return
+        var alert: String = config.getString("General.TargetedPlayerBanAlert") ?: "null"
         alert = alert.replace("{target}", player.name)
 
         // if toggled, broadcast to all the players
