@@ -4,7 +4,14 @@ main: me._olios.banbook.BanBook
 api-version: 1.20
 commands:
   banbook:
+    description: the main command for the BanBook plugin
+    usage: /<command> <get/set/reload>
     aliases:
       - bb
-    usage: /<command>
-    description: the main command for the BanBook plugin
+    permission: banbook.admin
+    permission-message: §4You don't have permission to do that!
+
+permissions:
+  banbook.admin:
+    default: op
+    description: Allows you to use the /banbook command
